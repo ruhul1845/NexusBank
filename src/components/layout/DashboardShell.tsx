@@ -73,8 +73,17 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [markRead] = useMarkNotificationsReadMutation();
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
-  const role = session?.user?.role || "CUSTOMER";
+  // Derive the nav from the current section so it never flips to the customer
+  // links while the session is still loading (which would bounce staff back to /staff).
+  const role = pathname.startsWith("/admin")
+    ? "ADMIN"
+    : pathname.startsWith("/staff")
+      ? "STAFF"
+      : pathname.startsWith("/customer")
+        ? "CUSTOMER"
+        : session?.user?.role || "CUSTOMER";
   const navItems = role === "ADMIN" ? ADMIN_NAV : role === "STAFF" ? STAFF_NAV : CUSTOMER_NAV;
+  const homeHref = role === "ADMIN" ? "/admin" : role === "STAFF" ? "/staff" : "/customer";
 
   const roleLabel = role === "ADMIN" ? "Administrator" : role === "STAFF" ? "Bank Staff" : "Personal Banking";
 
@@ -95,7 +104,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         }`}
       >
         <div className="flex h-16 items-center justify-between border-b border-slate-200 px-5 dark:border-slate-800">
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link href={homeHref} className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white shadow-sm">
               <Building2 className="h-5 w-5" />
             </div>
