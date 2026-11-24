@@ -54,13 +54,14 @@ export default function CustomerDashboard() {
 
   const activeAccount = accounts.find((a) => a.id === selectedAccountId) || accounts[0];
   const kpis = (analytics?.kpis as Record<string, number>) || {};
-  const monthlyHistory = (analytics?.monthlyHistory as Array<{ month: string; deposits: number; spending: number }>) || [];
+  const monthlyHistory =
+    (analytics?.monthlyHistory as Array<{ month: string; deposits: number; spending: number }>) || [];
   const txDist = (analytics?.transactionDistribution as Array<{ name: string; value: number }>) || [];
 
   return (
     <DashboardShell>
       <div className="space-y-6">
-        {/* Top Bar with Account Switcher */}
+        {/* Top Bar */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
@@ -72,27 +73,13 @@ export default function CustomerDashboard() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            {accounts.length > 0 && (
-              <select
-                value={activeAccount?.id || ""}
-                onChange={(e) => dispatch(setSelectedAccountId(e.target.value))}
-                className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-800 shadow-sm outline-none focus:border-brand-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
-              >
-                {accounts.map((acc) => (
-                  <option key={acc.id} value={acc.id}>
-                    {acc.accountType} ••••{acc.accountNumber.slice(-4)} ({formatCurrency(acc.balance)})
-                  </option>
-                ))}
-              </select>
+            {activeAccount && (
+              <span className="font-mono text-sm font-semibold text-slate-800 dark:text-white">
+                {activeAccount.accountType} ACCOUNT :  {activeAccount.accountNumber}
+              </span>
             )}
 
-            <Link
-              href="/customer/transfer"
-              className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
-            >
-              <ArrowLeftRight className="h-4 w-4" />
-              Send Money
-            </Link>
+            
           </div>
         </div>
 
@@ -109,7 +96,7 @@ export default function CustomerDashboard() {
               {accountsLoading ? "..." : formatCurrency(kpis.totalBalance ?? 0)}
             </p>
             <p className="mt-1 text-xs text-slate-500">
-              Active Account: {activeAccount ? formatCurrency(activeAccount.balance) : "$0.00"}
+              Active Account: {activeAccount ? formatCurrency(activeAccount.balance) : formatCurrency(0)}
             </p>
           </div>
 
@@ -149,37 +136,6 @@ export default function CustomerDashboard() {
           </div>
         </div>
 
-        {/* Active Account Details Banner */}
-        {activeAccount && (
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-brand-200/60 bg-gradient-to-r from-brand-950 to-slate-900 p-6 text-white shadow-md dark:border-slate-800">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <span className="text-xs font-semibold uppercase tracking-wider text-brand-300">
-                  {activeAccount.accountType} Account
-                </span>
-                <StatusBadge status={activeAccount.status} />
-              </div>
-              <p className="mt-1 font-mono text-lg font-semibold tracking-wider">
-                {activeAccount.accountNumber}
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-6 text-sm">
-              <div>
-                <span className="block text-xs text-brand-200/70">Available Balance</span>
-                <span className="text-xl font-bold">{formatCurrency(activeAccount.balance)}</span>
-              </div>
-              <div>
-                <span className="block text-xs text-brand-200/70">Daily Limit</span>
-                <span className="font-semibold">{formatCurrency(activeAccount.dailyTransferLimit)}</span>
-              </div>
-              <div>
-                <span className="block text-xs text-brand-200/70">Single Txn Max</span>
-                <span className="font-semibold">{formatCurrency(activeAccount.maxSingleTransfer)}</span>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Charts Row */}
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 lg:col-span-2">
@@ -204,8 +160,8 @@ export default function CustomerDashboard() {
                   <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
-                  <Area type="monotone" dataKey="deposits" stroke="#10b981" fill="url(#depGrad)" name="Deposits ($)" />
-                  <Area type="monotone" dataKey="spending" stroke="#4f46e5" fill="url(#spendGrad)" name="Spending ($)" />
+                  <Area type="monotone" dataKey="deposits" stroke="#10b981" fill="url(#depGrad)" name="Deposits (৳)" />
+                  <Area type="monotone" dataKey="spending" stroke="#4f46e5" fill="url(#spendGrad)" name="Spending (৳)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
