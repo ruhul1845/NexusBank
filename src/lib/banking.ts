@@ -13,12 +13,12 @@ export function generateAccountNumber(): string {
 
 export function formatCurrency(amount: number | string): string {
   const num = typeof amount === "string" ? parseFloat(amount) : amount;
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
+  const safeNum = Number.isNaN(num) ? 0 : num;
+  const formatted = new Intl.NumberFormat("en-BD", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(Number.isNaN(num) ? 0 : num);
+  }).format(Math.abs(safeNum));
+  return `${safeNum < 0 ? "-" : ""}৳${formatted}`;
 }
 
 export interface AmortizationInstallment {
@@ -76,7 +76,7 @@ export function evaluateSuspiciousTransaction(
   if (amount >= threshold) {
     return {
       isFlagged: true,
-      flagReason: `Amount ($${amount.toFixed(2)}) meets or exceeds suspicious threshold ($${threshold.toFixed(2)})`,
+      flagReason: `Amount (৳${amount.toFixed(2)}) meets or exceeds suspicious threshold (৳${threshold.toFixed(2)})`,
     };
   }
   if (recentHourlyCount >= 5) {
