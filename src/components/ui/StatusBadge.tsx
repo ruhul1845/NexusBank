@@ -18,14 +18,61 @@ const VARIANT_MAP: Record<string, string> = {
   CLOSED: "bg-slate-100 text-slate-600 ring-slate-500/20 dark:bg-slate-800 dark:text-slate-400",
 };
 
-export function StatusBadge({ status }: { status: string }) {
-  const cls =
-    VARIANT_MAP[status] ||
-    "bg-slate-100 text-slate-700 ring-slate-500/20 dark:bg-slate-800 dark:text-slate-300";
+/**
+ * Text-only colours per status. No background, no ring, no pill —
+ * used where a badge should read as plain coloured text.
+ */
+const TEXT_ONLY_MAP: Record<string, string> = {
+  ACTIVE: "text-emerald-600 dark:text-emerald-400",
+  COMPLETED: "text-emerald-600 dark:text-emerald-400",
+  APPROVED: "text-emerald-600 dark:text-emerald-400",
+  PAID: "text-emerald-600 dark:text-emerald-400",
+  VERIFIED: "text-emerald-600 dark:text-emerald-400",
+  PENDING: "text-amber-600 dark:text-amber-400",
+  UNDER_REVIEW: "text-indigo-600 dark:text-indigo-400",
+  FROZEN: "text-sky-600 dark:text-sky-400",
+  REJECTED: "text-rose-600 dark:text-rose-400",
+  FAILED: "text-rose-600 dark:text-rose-400",
+  BLOCKED: "text-rose-600 dark:text-rose-400",
+  FLAGGED: "text-rose-600 dark:text-rose-400",
+  DEACTIVATED: "text-slate-500 dark:text-slate-400",
+  REVERSED: "text-purple-600 dark:text-purple-400",
+  CLOSED: "text-slate-500 dark:text-slate-400",
+};
 
+const DEFAULT_SOLID =
+  "bg-slate-100 text-slate-700 ring-slate-500/20 dark:bg-slate-800 dark:text-slate-300";
+const DEFAULT_TEXT_ONLY = "text-slate-600 dark:text-slate-400";
+
+type StatusBadgeVariant = "solid" | "text";
+
+interface StatusBadgeProps {
+  status: string;
+  /** "text" (default) renders coloured text only; "solid" renders the pill. */
+  variant?: StatusBadgeVariant;
+  className?: string;
+}
+
+export function StatusBadge({ status, variant = "text", className = "" }: StatusBadgeProps) {
+  const label = status.replace(/_/g, " ");
+
+  if (variant === "text") {
+    const tone = TEXT_ONLY_MAP[status] || DEFAULT_TEXT_ONLY;
+    return (
+      <span
+        className={`text-xs font-semibold uppercase tracking-wider ${tone} ${className}`.trim()}
+      >
+        {label}
+      </span>
+    );
+  }
+
+  const cls = VARIANT_MAP[status] || DEFAULT_SOLID;
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${cls}`}>
-      {status.replace(/_/g, " ")}
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${cls} ${className}`.trim()}
+    >
+      {label}
     </span>
   );
 }
