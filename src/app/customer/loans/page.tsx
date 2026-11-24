@@ -139,7 +139,7 @@ export default function CustomerLoansPage() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
-                  Requested Amount ($)
+                  Requested Amount (৳)
                 </label>
                 <input
                   type="number"
@@ -153,7 +153,7 @@ export default function CustomerLoansPage() {
               </div>
               <div>
                 <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
-                  Monthly Income ($)
+                  Monthly Income (৳)
                 </label>
                 <input
                   type="number"
