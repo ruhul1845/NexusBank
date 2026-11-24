@@ -106,7 +106,7 @@ export default function DepositsWithdrawalsPage() {
             </div>
 
             <div>
-              <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">Amount (USD)</label>
+              <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">Amount (৳)</label>
               <input
                 type="number"
                 step="0.01"
