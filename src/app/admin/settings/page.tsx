@@ -71,7 +71,7 @@ export default function AdminSettingsPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Default Daily Transfer Limit ($)
+                    Default Daily Transfer Limit (৳)
                   </label>
                   <input
                     type="number"
@@ -83,7 +83,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <div>
                   <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Max Single Transaction Amount ($)
+                    Max Single Transaction Amount (৳)
                   </label>
                   <input
                     type="number"
@@ -98,7 +98,7 @@ export default function AdminSettingsPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
-                    Default Minimum Balance ($)
+                    Default Minimum Balance (৳)
                   </label>
                   <input
                     type="number"
@@ -125,7 +125,7 @@ export default function AdminSettingsPage() {
 
               <div>
                 <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
-                  Suspicious Transaction Alert Threshold ($)
+                  Suspicious Transaction Alert Threshold (৳)
                 </label>
                 <input
                   type="number"

@@ -66,10 +66,40 @@ export default function AdminLoansPage() {
                       </h3>
                       <StatusBadge status={loan.status} />
                     </div>
-                    <p className="mt-1 text-xs text-slate-500">
-                      {loan.durationMonths} mo @ {loan.interestRate}% APR • Income: {formatCurrency(loan.monthlyIncome)}
-                      /mo • Account: {loan.account?.accountNumber}
-                    </p>
+                    <dl className="mt-3 grid grid-cols-1 gap-1.5">
+                      <div className="flex items-baseline gap-2">
+                        <dt className="w-32 shrink-0 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                          Term
+                        </dt>
+                        <dd className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                          {loan.durationMonths} months
+                        </dd>
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <dt className="w-32 shrink-0 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                          Interest
+                        </dt>
+                        <dd className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                          {loan.interestRate}% APR
+                        </dd>
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <dt className="w-32 shrink-0 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                          Monthly Income
+                        </dt>
+                        <dd className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                          {formatCurrency(loan.monthlyIncome)}
+                        </dd>
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <dt className="w-32 shrink-0 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                          Account
+                        </dt>
+                        <dd className="font-mono text-sm font-semibold text-slate-800 dark:text-slate-200">
+                          {loan.account?.accountNumber}
+                        </dd>
+                      </div>
+                    </dl>
                   </div>
                   <div className="text-right">
                     <span className="text-xs text-slate-500">
@@ -83,7 +113,7 @@ export default function AdminLoansPage() {
 
                 <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{loan.description}</p>
                 {loan.staffNotes && (
-                  <p className="mt-2 rounded-xl bg-indigo-50/70 px-3.5 py-2 text-xs text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-300">
+                  <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">
                     <span className="font-semibold">Staff Pre-Screen Note:</span> {loan.staffNotes}
                   </p>
                 )}
