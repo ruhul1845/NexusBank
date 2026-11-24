@@ -263,7 +263,7 @@ async function main() {
           status: TransactionStatus.COMPLETED,
           description: "Equipment Vendor Wire",
           isFlagged: true,
-          flagReason: "Exceeds suspicious amount threshold ($8,000.00)",
+          flagReason: "Exceeds suspicious amount threshold (৳8,000.00)",
           createdAt: monthsAgo(1, 21),
         },
         {
@@ -384,21 +384,21 @@ async function main() {
         {
           userId: customer1.id,
           title: "Loan Disbursed",
-          message: "Your Auto Loan of $18,000.00 has been approved and credited to account 400188291001.",
+          message: "Your Auto Loan of ৳18,000.00 has been approved and credited to account 400188291001.",
           type: "LOAN",
           emailSent: true,
         },
         {
           userId: customer1.id,
           title: "Transfer Completed",
-          message: "You transferred $1,250.00 to account 400177403001 (Ref: TXN-2026-10010).",
+          message: "You transferred ৳1,250.00 to account 400177403001 (Ref: TXN-2026-10010).",
           type: "TRANSACTION",
           emailSent: true,
         },
         {
           userId: admin.id,
           title: "Flagged Transaction Alert",
-          message: "Withdrawal of $9,500.00 (Ref: TXN-2026-10008) exceeded the $8,000.00 threshold.",
+          message: "Withdrawal of ৳9,500.00 (Ref: TXN-2026-10008) exceeded the ৳8,000.00 threshold.",
           type: "SECURITY",
           emailSent: false,
         },
