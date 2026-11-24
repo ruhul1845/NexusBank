@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+enum UserStatus {
+  ACTIVE
+  DEACTIVATED
+  BLOCKED
+}
+
+enum AccountType {
+  SAVINGS
+  CURRENT
+  BUSINESS
+}
+
+enum AccountStatus {
+  ACTIVE
+  FROZEN
+  CLOSED
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  FUND_TRANSFER
+  LOAN_DISBURSEMENT
+  LOAN_REPAYMENT
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REVERSED
+}
+
+enum RequestType {
+  DEPOSIT
+  WITHDRAWAL
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LoanType {
+  PERSONAL
+  HOME
+  AUTO
+  BUSINESS
+  EDUCATION
+}
+
+enum LoanStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  ACTIVE
+  COMPLETED
+}
+
+enum RepaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+}
+
+enum NotificationType {
+  TRANSACTION
+  DEPOSIT_WITHDRAWAL
+  LOAN
+  SECURITY
+}
+
+model User {
+  id                 String        @id @default(cuid())
+  name               String
+  email              String        @unique
+  passwordHash       String
+  phone              String?
+  address            String?
+  role               Role          @default(CUSTOMER)
+  status             UserStatus    @default(ACTIVE)
+  isVerified         Boolean       @default(false)
+  transactionPinHash String?
+  twoFactorEnabled   Boolean       @default(false)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  accounts           BankAccount[]
+  loans              Loan[]
+  depositWithdrawals DepositWithdrawalRequest[] @relation("CustomerRequests")
+  processedRequests  DepositWithdrawalRequest[] @relation("ProcessedByStaff")
+  notifications      Notification[]
+}
+
+model BankAccount {
+  id                 String        @id @default(cuid())
+  accountNumber      String        @unique
+  userId             String
+  accountType        AccountType   @default(SAVINGS)
+  balance            Decimal       @default(0.00) @db.Decimal(15, 2)
+  status             AccountStatus @default(ACTIVE)
+  dailyTransferLimit Decimal       @default(10000.00) @db.Decimal(15, 2)
+  maxSingleTransfer  Decimal       @default(5000.00) @db.Decimal(15, 2)
+  minBalance         Decimal       @default(0.00) @db.Decimal(15, 2)
+  currency           String        @default("USD")
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sentTransactions   Transaction[] @relation("SenderAccount")
+  receivedTransactions Transaction[] @relation("ReceiverAccount")
+  requests           DepositWithdrawalRequest[]
+  loans              Loan[]
+}
+
+model Transaction {
+  id                String            @id @default(cuid())
+  referenceId       String            @unique
+  idempotencyKey    String?           @unique
+  senderAccountId   String?
+  receiverAccountId String?
+  type              TransactionType
+  amount            Decimal           @db.Decimal(15, 2)
+  fee               Decimal           @default(0.00) @db.Decimal(15, 2)
+  status            TransactionStatus @default(COMPLETED)
+  description       String
+  isFlagged         Boolean           @default(false)
+  flagReason        String?
+  reviewedById      String?
+  createdAt         DateTime          @default(now())
+
+  senderAccount     BankAccount?      @relation("SenderAccount", fields: [senderAccountId], references: [id])
+  receiverAccount   BankAccount?      @relation("ReceiverAccount", fields: [receiverAccountId], references: [id])
+}
+
+model DepositWithdrawalRequest {
+  id              String        @id @default(cuid())
+  accountId       String
+  userId          String
+  type            RequestType
+  amount          Decimal       @db.Decimal(15, 2)
+  description     String
+  status          RequestStatus @default(PENDING)
+  requestDate     DateTime      @default(now())
+  processedById   String?
+  processedAt     DateTime?
+  rejectionReason String?
+
+  account         BankAccount   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  user            User          @relation("CustomerRequests", fields: [userId], references: [id], onDelete: Cascade)
+  processedBy     User?         @relation("ProcessedByStaff", fields: [processedById], references: [id])
+}
+
+model Loan {
+  id               String          @id @default(cuid())
+  userId           String
+  accountId        String
+  loanType         LoanType
+  requestedAmount  Decimal         @db.Decimal(15, 2)
+  approvedAmount   Decimal?        @db.Decimal(15, 2)
+  durationMonths   Int
+  interestRate     Decimal         @default(8.50) @db.Decimal(5, 2)
+  monthlyIncome    Decimal         @db.Decimal(15, 2)
+  employmentStatus String
+  description      String
+  status           LoanStatus      @default(PENDING)
+  staffNotes       String?
+  remainingBalance Decimal         @default(0.00) @db.Decimal(15, 2)
+  disbursedAt      DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account          BankAccount     @relation(fields: [accountId], references: [id])
+  repayments       LoanRepayment[]
+}
+
+model LoanRepayment {
+  id                String          @id @default(cuid())
+  loanId            String
+  installmentNumber Int
+  dueDate           DateTime
+  amountDue         Decimal         @db.Decimal(15, 2)
+  principalPart     Decimal         @db.Decimal(15, 2)
+  interestPart      Decimal         @db.Decimal(15, 2)
+  amountPaid        Decimal         @default(0.00) @db.Decimal(15, 2)
+  status            RepaymentStatus @default(PENDING)
+  paidAt            DateTime?
+  transactionId     String?
+
+  loan              Loan            @relation(fields: [loanId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      NotificationType @default(TRANSACTION)
+  isRead    Boolean          @default(false)
+  emailSent Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model BankSettings {
+  id                        String   @id @default("default")
+  defaultDailyTransferLimit Decimal  @default(10000.00) @db.Decimal(15, 2)
+  defaultMaxSingleTransfer  Decimal  @default(5000.00) @db.Decimal(15, 2)
+  defaultMinBalance         Decimal  @default(50.00) @db.Decimal(15, 2)
+  transferFeePercent        Decimal  @default(0.25) @db.Decimal(5, 2)
+  suspiciousAmountThreshold Decimal  @default(8000.00) @db.Decimal(15, 2)
+  updatedAt                 DateTime @updatedAt
+}
