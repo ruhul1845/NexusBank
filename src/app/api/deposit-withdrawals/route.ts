@@ -74,7 +74,7 @@ export async function POST(req: Request) {
       const available = Number(account.balance) - Number(account.minBalance);
       if (amount > available) {
         return NextResponse.json(
-          { error: `Insufficient balance for withdrawal. Available: $${available.toFixed(2)}` },
+          { error: `Insufficient balance for withdrawal. Available: ৳${available.toFixed(2)}` },
           { status: 400 }
         );
       }
