@@ -158,7 +158,7 @@ export default function FundTransferPage() {
                         setRecipientAccountNumber(own.accountNumber);
                         lookupRecipient(own.accountNumber);
                       }}
-                      className="rounded-lg bg-brand-50 px-2.5 py-1 text-[11px] font-semibold text-brand-700 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-300"
+                      className="text-[11px] font-semibold text-brand-600 hover:underline dark:text-brand-400"
                     >
                       Own {own.accountType}
                     </button>
@@ -198,7 +198,7 @@ export default function FundTransferPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Amount (USD)
+                Amount (৳)
               </label>
               <input
                 type="number"
