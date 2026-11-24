@@ -96,7 +96,7 @@ export default function AdminDashboardPage() {
           {/* 1. Monthly Transaction Volume */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <h2 className="text-base font-semibold text-slate-900 dark:text-white">Monthly Transaction Volume</h2>
-            <p className="mb-4 text-xs text-slate-500">Total dollar volume processed per month</p>
+            <p className="mb-4 text-xs text-slate-500">Total taka volume processed per month</p>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={monthlyActivity}>
@@ -104,7 +104,7 @@ export default function AdminDashboardPage() {
                   <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
-                  <Area type="monotone" dataKey="volume" stroke="#4f46e5" fill="#4f46e5" fillOpacity={0.2} name="Volume ($)" />
+                  <Area type="monotone" dataKey="volume" stroke="#4f46e5" fill="#4f46e5" fillOpacity={0.2} name="Volume (৳)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -122,8 +122,8 @@ export default function AdminDashboardPage() {
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="deposits" fill="#10b981" radius={[6, 6, 0, 0]} name="Deposits ($)" />
-                  <Bar dataKey="withdrawals" fill="#f43f5e" radius={[6, 6, 0, 0]} name="Withdrawals ($)" />
+                  <Bar dataKey="deposits" fill="#10b981" radius={[6, 6, 0, 0]} name="Deposits (৳)" />
+                  <Bar dataKey="withdrawals" fill="#f43f5e" radius={[6, 6, 0, 0]} name="Withdrawals (৳)" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

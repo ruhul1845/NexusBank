@@ -121,7 +121,7 @@ export default function AdminAccountsPage() {
             <input
               type="number"
               min="0"
-              placeholder="Initial Deposit ($)"
+              placeholder="Initial Deposit (৳)"
               value={newAcc.initialDeposit}
               onChange={(e) => setNewAcc({ ...newAcc, initialDeposit: e.target.value })}
               className="rounded-xl border border-slate-200 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950"
@@ -220,7 +220,7 @@ export default function AdminAccountsPage() {
               </button>
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium">Daily Transfer Limit ($)</label>
+              <label className="mb-1 block text-xs font-medium">Daily Transfer Limit (৳)</label>
               <input
                 type="number"
                 required
@@ -230,7 +230,7 @@ export default function AdminAccountsPage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium">Max Single Transfer ($)</label>
+              <label className="mb-1 block text-xs font-medium">Max Single Transfer (৳)</label>
               <input
                 type="number"
                 required
@@ -240,7 +240,7 @@ export default function AdminAccountsPage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium">Minimum Balance ($)</label>
+              <label className="mb-1 block text-xs font-medium">Minimum Balance (৳)</label>
               <input
                 type="number"
                 required
