@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Building2, ArrowRight } from "lucide-react";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -18,6 +18,8 @@ export default function RegisterPage() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPin, setShowPin] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -44,22 +46,20 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 dark:bg-slate-950">
-      <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white">
-            <Building2 className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white">Open a NexusBank Account</h1>
-            <p className="text-xs text-slate-500">Instant digital account provisioning</p>
-          </div>
+    <div className="flex min-h-screen items-center justify-center bg-white px-4 py-12">
+      <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-colors duration-200 hover:border-brand-500">
+        <div className="mb-6 text-center">
+          <Link href="/" className="text-lg font-bold tracking-tight text-slate-900">
+            NexusBank
+          </Link>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-900">
+            Open a NexusBank Account
+          </h1>
+          <p className="mt-2 text-sm text-slate-500">Instant digital account provisioning</p>
         </div>
 
         {error && (
-          <div className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-900/50 dark:bg-rose-500/10 dark:text-rose-400">
-            {error}
-          </div>
+          <p className="mb-4 text-center text-sm font-medium text-rose-600">{error}</p>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -90,29 +90,49 @@ export default function RegisterPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">Password</label>
-              <input
-                type="password"
-                required
-                minLength={6}
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                placeholder="Min 6 characters"
-                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-brand-500 dark:border-slate-700 dark:bg-slate-950"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  minLength={6}
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  placeholder="Min 6 characters"
+                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-3.5 pr-11 text-sm outline-none focus:border-brand-500 dark:border-slate-700 dark:bg-slate-950"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-700"
+                >
+                  {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
+                </button>
+              </div>
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-slate-300">
                 Transaction PIN (4-6 digits)
               </label>
-              <input
-                type="password"
-                required
-                pattern="\d{4,6}"
-                value={form.transactionPin}
-                onChange={(e) => setForm({ ...form, transactionPin: e.target.value })}
-                placeholder="e.g. 1234"
-                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-brand-500 dark:border-slate-700 dark:bg-slate-950"
-              />
+              <div className="relative">
+                <input
+                  type={showPin ? "text" : "password"}
+                  required
+                  pattern="\d{4,6}"
+                  value={form.transactionPin}
+                  onChange={(e) => setForm({ ...form, transactionPin: e.target.value })}
+                  placeholder="e.g. 1234"
+                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-3.5 pr-11 text-sm outline-none focus:border-brand-500 dark:border-slate-700 dark:bg-slate-950"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPin((prev) => !prev)}
+                  aria-label={showPin ? "Hide transaction PIN" : "Show transaction PIN"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-700"
+                >
+                  {showPin ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
+                </button>
+              </div>
             </div>
           </div>
 
