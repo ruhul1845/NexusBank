@@ -58,9 +58,40 @@ export default function StaffLoansPage() {
                       </h3>
                       <StatusBadge status={loan.status} />
                     </div>
-                    <p className="mt-1 text-xs text-slate-500">
-                      {loan.user?.email} • Income: {formatCurrency(loan.monthlyIncome)}/mo • {loan.employmentStatus}
-                    </p>
+                    <dl className="mt-3 grid grid-cols-1 gap-1.5">
+                      <div className="flex items-baseline gap-2">
+                        <dt className="w-32 shrink-0 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                          Email
+                        </dt>
+                        <dd className="min-w-0 break-words text-sm font-semibold text-slate-800 dark:text-slate-200">
+                          {loan.user?.email}
+                        </dd>
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <dt className="w-32 shrink-0 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                          Monthly Income
+                        </dt>
+                        <dd className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                          {formatCurrency(loan.monthlyIncome)}
+                        </dd>
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <dt className="w-32 shrink-0 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                          Employment
+                        </dt>
+                        <dd className="min-w-0 break-words text-sm font-semibold text-slate-800 dark:text-slate-200">
+                          {loan.employmentStatus}
+                        </dd>
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <dt className="w-32 shrink-0 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                          Term
+                        </dt>
+                        <dd className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                          {loan.durationMonths} months
+                        </dd>
+                      </div>
+                    </dl>
                   </div>
                   <div className="text-right">
                     <span className="text-xs text-slate-500">Requested Amount</span>
@@ -92,7 +123,7 @@ export default function StaffLoansPage() {
                 )}
 
                 {loan.staffNotes && loan.status !== "PENDING" && (
-                  <p className="mt-3 rounded-xl bg-slate-50 px-3.5 py-2 text-xs text-slate-600 dark:bg-slate-800/50 dark:text-slate-300">
+                  <p className="mt-3 text-xs text-slate-600 dark:text-slate-400">
                     <span className="font-semibold">Staff Notes:</span> {loan.staffNotes}
                   </p>
                 )}

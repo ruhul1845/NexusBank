@@ -136,7 +136,7 @@ export default function StaffCustomersPage() {
               <input
                 type="number"
                 min="0"
-                placeholder="Initial Deposit ($)"
+                placeholder="Initial Deposit (৳)"
                 value={newForm.initialDeposit}
                 onChange={(e) => setNewForm({ ...newForm, initialDeposit: e.target.value })}
                 className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950"
